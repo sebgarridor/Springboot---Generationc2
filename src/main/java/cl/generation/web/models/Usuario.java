@@ -23,8 +23,6 @@ public class Usuario {
 	
 	@Id // establecemos una primary key
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //que sea autoincrementable
-
-	
 	private Long id;
 	
 	@NotNull // solo para el atributo que está abajo, no todos los atributos
@@ -32,7 +30,7 @@ public class Usuario {
 	private String nombre;
 	
 	
-	@NotNull 
+	@NotNull
 	private String apellido;
 	
 	@NotNull
