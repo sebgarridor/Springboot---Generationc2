@@ -1,12 +1,20 @@
 package cl.generation.web.models;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -16,6 +24,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="usuarios")
@@ -37,6 +47,30 @@ public class Usuario {
 	private String correo;
 	@NotNull
 	private String password;
+	
+	
+	//relacion OneToOne
+	@JsonIgnore //permite eliminar error de recursividad
+	@OneToOne(mappedBy = "usuario",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private Auto auto;
+	
+	//relacion OneToMany, el usuario va a tener muchas direcciones
+	
+	@OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<Direccion> direcciones;
+	
+	
+	//relacion ManyToMany
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name="roles_usuarios",   //nombre de tabla relacional
+			joinColumns = @JoinColumn(name="usuario_id"),
+			inverseJoinColumns = @JoinColumn(name="rol_id"))
+	
+	
+	private List<Rol> roles;
+	
 	
 	@Transient 
 	private String password2; //sirve para la confirmación de contraseña
@@ -137,6 +171,39 @@ public class Usuario {
 
 	public void setPeso(Float peso) {
 		this.peso = peso;
+	}
+	
+
+
+	public Auto getAuto() {
+		return auto;
+	}
+
+
+	public void setAuto(Auto auto) {
+		this.auto = auto;
+	}
+
+
+	public List<Direccion> getDirecciones() {
+		return direcciones;
+	}
+
+
+	public void setDirecciones(List<Direccion> direcciones) {
+		this.direcciones = direcciones;
+	}
+	
+	
+
+
+	public List<Rol> getRoles() {
+		return roles;
+	}
+
+
+	public void setRoles(List<Rol> roles) {
+		this.roles = roles;
 	}
 
 
