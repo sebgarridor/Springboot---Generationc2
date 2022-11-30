@@ -39,7 +39,6 @@ public class Usuario {
 	@Size(min=3, max=15, message= "Error en el ingreso del nombre") // le establecemos el tamaño mínimo y máx que viene en ese atributo
 	private String nombre;
 	
-	
 	@NotNull
 	private String apellido;
 	

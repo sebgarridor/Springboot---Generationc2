@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.generation.web.models.Rol;
 import cl.generation.web.models.Usuario;
 import cl.generation.web.services.UsuarioServiceImpl;
 
@@ -82,6 +83,14 @@ public class UsuarioApiRestController {
 	@GetMapping("/listar/usuarios")
 	public List<Usuario> obtenerListaUsuarios(){
 		return usuarioServiceImpl.obtenerListaUsuarios();
+	}
+	
+	@RequestMapping("/rol")
+	public Rol obtenerRol(){
+		Rol rol = new Rol();
+		rol.setNombre("Admin");
+		rol.setDescripcion("hace de too");
+		return rol;
 	}
 	
 
