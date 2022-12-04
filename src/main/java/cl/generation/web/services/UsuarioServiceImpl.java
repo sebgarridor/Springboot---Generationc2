@@ -1,8 +1,8 @@
 package cl.generation.web.services;
 
 import java.util.List;
-import java.util.Optional;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +18,28 @@ public class UsuarioServiceImpl implements UsuarioService {
 	private UsuarioRepository usuarioRepository;
 
 	@Override
-	public Usuario guardarUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
+	public Boolean guardarUsuario(Usuario usuario) {
 		
 		
-		//hacemos llamado al método guardar
-		return usuarioRepository.save(usuario);
+		// validar el usuario (email/correo)
+		Usuario retornoUsuario = usuarioRepository.findByCorreo(usuario.getCorreo()); //buscamos por correo a través del método definidio en el repository.
+		
+		//System.out.println(retornoUsuario.getCorreo());
+		
+		if(retornoUsuario == null) {
+			String passHashed = BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt()); //encriptamos a través de bcrypt. si paso 1234 -> ad123123123jdjdj4 por ej
+			//reemplazando el valor por el hash.
+			usuario.setPassword(passHashed);
+			usuarioRepository.save(usuario); //hacemos llamado al método guardar
+			return true;
+			
+		}else {
+			return false;
+			
+		}
+		
+
+		
 	}
 
 	@Override
@@ -87,6 +103,33 @@ public class UsuarioServiceImpl implements UsuarioService {
 		//obtenemos TODOS los usuarios
 		
 		return usuarioRepository.findAll();
+	}
+
+	@Override
+	public Boolean ingresarUsuario(String email, String password) {
+		System.out.println(email+" "+password);
+		
+		Usuario usuario = usuarioRepository.findByCorreo(email); //debo ir a buscar la info a la BD a través del repository (encargado de hacer la conexión a la BD)
+		if(usuario!= null) { //existe el usuario en la BD
+			//comparar las contraseñas
+			Boolean resultadoPassword = BCrypt.checkpw(password, usuario.getPassword()); //checkeamos la password encriptada en la BD.
+			//resultadoPassword == true; son iguales -> false, no coinciden.
+			
+			if(resultadoPassword) {
+				return true;
+				
+			}else {
+				return false;
+			}
+			
+			//otra vía más corta -> return BCrypt.checkpw(password, usuario.getPassword())
+			//sirve para reemplazar todas las validaciones y la creación de la variable booleana 'resultadoPassword'
+			
+		}else { //no existe el email en el bd
+			return false;
+		}
+		
+		
 	}
 	
 

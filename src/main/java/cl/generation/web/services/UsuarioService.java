@@ -8,7 +8,7 @@ import cl.generation.web.models.Usuario;
 public interface UsuarioService {
 	
 	//solo para definir metodos para crud Usuario
-	public Usuario guardarUsuario(Usuario usuario);
+	public Boolean guardarUsuario(Usuario usuario);
 	
 	public String eliminarUsuario(Long id);
 	
@@ -17,5 +17,11 @@ public interface UsuarioService {
 	public Usuario obtenerUsuario(Long id);
 	
 	public List<Usuario> obtenerListaUsuarios();
+	
+	
+	//login	dasd	
+	
+	public Boolean ingresarUsuario(String email, String password);
+	
 
 }
