@@ -23,5 +23,7 @@ public interface UsuarioService {
 	
 	public Boolean ingresarUsuario(String email, String password);
 	
+	public Usuario obtenerUsuarioEmail(String email);
+	
 
 }

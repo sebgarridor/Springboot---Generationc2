@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,11 +13,18 @@
 </head>
 <body>
     <!-- Action = ruta donde enviaremos la información-->
-    <div class="container-fluid">
+  <div class="container-fluid">
+  <h2>Formulario registro</h2>
+
+  <c:if test="${msgError!=null }">
+  <div class="alert alert-danger" role="alert">
+  <c:out value="${msgError}"></c:out>  <!-- placeholder-->
+  </div>
+  </c:if> <!-- igual a un if normal pero con etiqueta-->
     
   <div class="card">
   <div class="card-body">
-    <form action="/registro/formulario" method="post">
+    <form action="/registro/usuario" method="post">
         <label for="nombre" class="form-label">Nombre:</label>
         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese su nombre">
         <br>
@@ -34,7 +43,7 @@
          <label for="password2" class="form-label">Confirme su password:</label>
         <input type="password" class="form-control" id="password2" name="password2" placeholder="ingrese password">
         <br>
-        <button type="submit" class="btn btn-outline-success">Enviar</button>
+        <button type="submit" class="btn btn-outline-success" value="Enviar">Login</button>
     </form>
   </div>
 </div>

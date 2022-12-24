@@ -1,5 +1,7 @@
 package cl.generation.web.controllers;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,12 +90,20 @@ public class RegistroController {
 	@PostMapping("/login")
 	public String ingresoUsuario(@RequestParam("email") String email,
 			@RequestParam("password") String password,
-			Model model) {
+			Model model,
+			HttpSession session) {
 		
 		//llamando al método
 		Boolean resultadoLogin = usuarioServiceImpl.ingresarUsuario(email, password);
 		
 		if(resultadoLogin) { //si resultadoLogin == true, login correcto.
+			Usuario usuario = usuarioServiceImpl.obtenerUsuarioEmail(email);
+			//guardar información en sesión
+			session.setAttribute("usuarioId", usuario.getId());
+			session.setAttribute("usuarioEmail", usuario.getCorreo());
+			session.setAttribute("usuarioRol", usuario.getRoles());
+			session.setAttribute("usuarioNombre", usuario.getNombre() + usuario.getApellido());
+			
 			return "redirect:/home";
 			
 		}else {
@@ -101,6 +111,15 @@ public class RegistroController {
 			return "login.jsp";
 		}
 		
+	}
+	
+	@RequestMapping("/logout")
+	public String logout(HttpSession session) {
+		if(session.getAttribute("usuarioId")!= null) {
+			session.invalidate(); //el invalidate mata toda la sesion
+			
+		}
+		return "redirect:/registro/login";
 	}
 
 }
